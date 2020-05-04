@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Game Center</title>
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Firebase url: https://nysl-mobile-app-aa6fd.web.app -->
+
+    <!-- Local server url:http://localhost:5500/public/redirectAfterSignOn.html -->
+
+    <!-- FAVICON from https://realfavicongenerator.net/ -->
+
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="manifest" href="img/site.webmanifest">
+    <link rel="mask-icon" href="img/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="img/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="All your games information and chats in one place">
+    <!-- Disable tap highlight on IE -->
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="NYSL Game Center">
+    <meta name="theme-color" content="#303F9F">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NYSL Game Center">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#303F9F">
+
+    <!-- Tile icon for Win8 -->
+    <meta name="msapplication-TileColor" content="#3372DF">
+    <meta name="msapplication-navbutton-color" content="#303F9F">
+
+    <!-- Material Design Lite -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.blue_grey-orange.min.css">
+    <script src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+
+    <!-- FIREBASE USER INTERFACE styles-->
+    <link href="styles/style.css" rel="stylesheet" type="text/css" media="screen" />
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.css" />
+
+    <!-- My STYLES -->
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!-- Splash SIGN ON screen with FIREBASE UI -->
+        <div class="container-fluid" id="page-splash">
+
+            <h3 class="logo-sign-on2">
+                Welcome to your <br> Game Center!
+            </h3>
+            <div>
+                <span id="sign-in-button"></span>
+            </div>
+
+
+            <!-- END of Splash SIGN ON screen -->
+
+        </div>
+        <!-- MESSAGES in General Announcements Board-->
+        <div class="row">
+            <div class="col">
+                <img id="logo-nysl" src="img/nysl_logo.png" alt="logo de nysl con balon de futbol">
+                <h1 id="top-line"></h1>
+                <h1>Northside Youth Soccer League</h1>
+
+                <header id="site-banner">
+                </header>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+                    <!-- Header section containing logo and menu -->
+                    <div id="chat" class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+                        <h2>General Announcements Board</h2>
+                        <header class="header mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
+                            <div class="mdl-layout__header-row titlebar">
+                                <h3 class="logo">Messages</h3>
+                                <button id="sign-out-button" class="mdl-button--raised mdl-button mdl-js-button"><i class="material-icons">account_circle</i> Sign out</button>
+                            </div>
+
+                            <!-- Navigation Bar -->
+                            <div class="tab mdl-layout__header-row mdl-color--light-blue-600">
+                                <div class="mdl-tab">
+                                    <div id="menu-recent" class="mdl-layout__tab is-active mdl-button mdl-js-button">
+                                        <i class="material-icons">new_releases</i> Recent
+                                    </div>
+                                    <div id="menu-my-posts" class="mdl-layout__tab mdl-button mdl-js-button">
+                                        <i class="material-icons">home</i> My posts
+                                    </div>
+                                    <div id="menu-my-top-posts" class="mdl-layout__tab mdl-button mdl-js-button">
+                                        <i class="material-icons">trending_up</i> My top posts
+                                    </div>
+                                    <button class="mdl-button mdl-js-button mdl-button--fab mdl-color--amber-400 mdl-shadow--4dp" id="add">
+                                    <i class="material-icons">mode_edit</i>
+                                </button>
+                                </div>
+                            </div>
+                        </header>
+
+
+                        <main class="mdl-layout__content mdl-color--grey-100">
+
+                            <!-- Show the add post form -->
+                            <section class="mdl-grid content" id="add-post" style="display:none">
+                                <div class="mdl-cell mdl-cell--12-col mdl-grid">
+
+                                    <!-- Card containing the inputs to add a new messages -->
+                                    <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--6-col-desktop">
+                                        <div class="mdl-card__title mdl-color--light-blue-600 mdl-color-text--white">
+                                            <h2 class="mdl-card__title-text">New Post</h2>
+                                        </div>
+                                        <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                                            <form id="message-form" action="#">
+                                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                                    <input class="mdl-textfield__input" type="text" id="new-post-title">
+                                                    <label class="mdl-textfield__label" for="new-post-title">Post title...</label>
+                                                </div>
+                                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                                    <textarea class="mdl-textfield__input" rows="3" id="new-post-message"></textarea>
+                                                    <label class="mdl-textfield__label" for="new-post-message">Post message...</label>
+                                                </div>
+                                                <button type="submit" class="mdl-button mdl-js-button mdl-button--raised">
+                                                    Add post
+                                            </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- Show a list of recent posts -->
+                            <section class="mdl-grid content" id="recent-posts-list" style="display:none">
+                                <div class="posts-container mdl-cell mdl-cell--12-col mdl-grid">
+                                </div>
+                            </section>
+
+                            <!-- Show the list of user's posts -->
+                            <section class="mdl-grid content" id="user-posts-list" style="display:none">
+                                <div class="posts-container mdl-cell mdl-cell--12-col mdl-grid">
+                                </div>
+                            </section>
+
+                            <!-- Show the list of top user's posts -->
+                            <section class="mdl-grid content" id="top-user-posts-list" style="display:none">
+                                <div class="posts-container mdl-cell mdl-cell--12-col mdl-grid">
+                                </div>
+                            </section>
+                        </main>
+                    </div>
+
+                    <!-- END CHAT -->
+
+                </div>
+            </div>
+        </div>
+
+        <!-- END SPLASH PAGE SIGN ON -->
+
+        <!-- NYSL SPA WEB SITE STARTS HERE-->
+        <div class="row">
+            <div class="col">
+                <h2>Game Information</h2>
+
+                <h3>Fall Schedule</h3>
+                <u>* All games take place on Sunday.</u>
+            </div>
+        </div>
+
+        <br>
+        <!-- GAME TABLES STARTS HERE-->
+        <div class="row" id="app">
+            <div class="col">
+                <table class="table table-sm table-responsive table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th colspan="5"><b class="table-title">SEPTEMBER</b></th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th><u>Teams</u></th>
+                            <th><u>Location</u></th>
+                            <th><u>Times</u></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="2">9/01</td>
+                            <td>U1 and U4</td>
+                            <td>AJ Katzenmaier</td>
+                            <td>9:30 am</td>
+                            <td><a href="#demo1" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo1" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(1)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 1">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>U3 and U2</td>
+                            <td>Greenbay</td>
+                            <td>1:00 pm</td>
+                            <td>
+                                <a href="#demo2" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo2" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(2)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 2">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">9/08</td>
+                            <td>U5 and U6</td>
+                            <td>Howard A Yeager</td>
+                            <td>9:30 am</td>
+                            <td>
+                                <a href="#demo3" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo3" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(3)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 3">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>U6 and U1</td>
+                            <td>Marjorie P Hart</td>
+                            <td>1:00 pm</td>
+                            <td>
+                                <a href="#demo4" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo4" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(4)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 4">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">9/15</td>
+                            <td>U2 and U4</td>
+                            <td>North</td>
+                            <td>9:30 am</td>
+                            <td>
+                                <a href="#demo5" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo5" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(5)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 5">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>U3 and U5</td>
+                            <td>AJ Katzenmaier</td>
+                            <td>1:00 pm</td>
+                            <td>
+                                <a href="#demo6" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo6" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(6)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 6">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">9/22</td>
+                            <td>U1 and U3</td>
+                            <td>South</td>
+                            <td>9:30 am</td>
+                            <td>
+                                <a href="#demo7" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo7" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(7)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 7">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>U2 and U6</td>
+                            <td>Howard A Yeager</td>
+                            <td>1:00 pm</td>
+                            <td>
+                                <a href="#demo8" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo8" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(8)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 8">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>9/29</td>
+                            <td>U4 and U5</td>
+                            <td>Greenbay</td>
+                            <td>9:30 am</td>
+                            <td>
+                                <a href="#demo9" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo9" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(9)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 9">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col">
+                <table class="table table-sm table-striped table-responsive table-hover">
+                    <thead>
+                        <tr>
+                            <th colspan="5"><b class="table-title">OCTOBER</b></th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th><u>Teams</u></th>
+                            <th><u>Location</u></th>
+                            <th><u>Times</u></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="2">10/06</td>
+                            <td>U2 and U5</td>
+                            <td>Marjorie P Hart</td>
+                            <td>9:30 am</td>
+                            <td>
+                                <a href="#demo10" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo10" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(10)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 10">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>U1 and U6</td>
+                            <td>South</td>
+                            <td>1:00 pm</td>
+                            <td>
+                                <a href="#demo11" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo11" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(11)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 11">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">10/13</td>
+                            <td>U3 and U4</td>
+                            <td>Howard A Yeager</td>
+                            <td>9:30 am</td>
+                            <td>
+                                <a href="#demo12" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo12" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(12)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 12">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>U5 and U1</td>
+                            <td>Greenbay</td>
+                            <td>1:00 pm</td>
+                            <td>
+                                <a href="#demo13" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo13" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(13)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 13">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">10/20</td>
+                            <td>U6 and U3</td>
+                            <td>North</td>
+                            <td>9:30 am</td>
+                            <td>
+                                <a href="#demo14" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo14" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(14)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 14">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>U2 and U4</td>
+                            <td>Marjorie P Hart</td>
+                            <td>1:00 pm</td>
+                            <td>
+                                <a href="#demo15" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo15" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(15)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 15">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">10/27</td>
+                            <td>U3 and U1</td>
+                            <td>AJ Katzenmaier</td>
+                            <td>9:30 am</td>
+                            <td>
+                                <a href="#demo16" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo16" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(16)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 16">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>U5 and U6</td>
+                            <td>Howard A Yeager</td>
+                            <td>1:00 pm</td>
+                            <td>
+                                <a href="#demo17" class="btn bg-primary text-white" data-toggle="collapse" v-on:click="collapseAll">Game chat!</a>
+                                <br>
+                                <div id="demo17" class="collapse">
+                                    <div class="container">
+                                        <img class=" d-sm-none" src="img/tiltPhone.png" alt="image showing to tilt phone">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Comment: </label>
+                                                <input type="text" v-model:value="message">
+                                                <button class="btn btn-success" v-on:click="send(17)">Send</button>
+                                                <div v-for="message in gameMessages" v-if="message.gameId == 17">
+                                                    <p><b>{{ message.commentator }} said:</b></p>
+                                                    <p>{{ message.text }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="d-none d-sm-block">
+
+            <div class="row" id="tables-row">
+                <div class="col">
+
+                    <!-- CURRENT MONTH's CALENDAR-->
+
+                    <div class="card">
+                        <h3 class="card-header" id="monthAndYear"></h3>
+                        <table class="table table-sm table-bordered table-responsive-sm" id="calendar">
+                            <thead>
+                                <tr>
+                                    <th>Sun</th>
+                                    <th>Mon</th>
+                                    <th>Tue</th>
+                                    <th>Wed</th>
+                                    <th>Thu</th>
+                                    <th>Fri</th>
+                                    <th>Sat</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="calendar-body">
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+                <!-- NEXT MONTH's CAELENDAR-->
+
+                <div class="col">
+                    <div class="card">
+                        <h3 class="card-header" id="monthAndYear2"></h3>
+                        <table class="table table-sm table-bordered table-responsive-sm" id="calendar2">
+                            <thead>
+                                <tr>
+                                    <th>Sun</th>
+                                    <th>Mon</th>
+                                    <th>Tue</th>
+                                    <th>Wed</th>
+                                    <th>Thu</th>
+                                    <th>Fri</th>
+                                    <th>Sat</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="calendar-body2">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+
+                    <div class="form-inline">
+                        <button class="btn btn-outline-primary col-sm-6" id="previous" onclick="previous()">Previous</button>
+                        <button class="btn btn-outline-primary col-sm-6" id="next" onclick="next()">Next</button>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <form class="form-inline">
+                        <label class="lead mr-2 ml-2" for="month">Jump To: </label>
+                        <select class="form-control col-sm-4" name="month" id="month" onchange="jump()">
+                                <option value=0>Jan</option>
+                                <option value=1>Feb</option>
+                                <option value=2>Mar</option>
+                                <option value=3>Apr</option>
+                                <option value=4>May</option>
+                                <option value=5>Jun</option>
+                                <option value=6>Jul</option>
+                                <option value=7>Aug</option>
+                                <option value=8>Sep</option>
+                                <option value=9>Oct</option>
+                                <option value=10>Nov</option>
+                                <option value=11>Dec</option>
+                            </select>
+
+                        <label for="year"></label>
+                        <select class="form-control col-sm-4" name="year" id="year" onchange="jump()">
+                                <option value=2019>2019</option>
+                                <option value=2020>2020</option>
+                                <option value=2021>2021</option>
+                                <option value=2022>2022</option>
+                                <option value=2023>2023</option>
+                                <option value=2024>2024</option>
+                                <option value=2025>2025</option>
+                                <option value=2026>2026</option>
+                                <option value=2027>2027</option>
+                                <option value=2028>2028</option>
+                                <option value=2029>2029</option>
+                                <option value=2030>2030</option>
+                            </select>
+                    </form>
+                    <form class="form-inline">
+                        <div name="month2" id="month2"></div>
+                        <div name="year2" id="year2"></div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col">
+                <table class="table table-sm table-striped table-responsive table-hover">
+                    <thead>
+                        <tr>
+                            <th colspan="3"><b>Game Locations:</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>AJ Katzenmaier Elementary</td>
+                            <td>24 W. Walton St., Chicago, IL 60610</td>
+                            <td class="mapa">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2969.654246110989!2d-87.63123908469325!3d41.90029237922037!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880fd34e07f6bac3%3A0x68a82e5d59952c86!2s24%20W%20Walton%20St%2C%20Chicago%2C%20IL%2060610%2C%20EE.%20UU.!5e0!3m2!1ses!2sar!4v1583514598907!5m2!1ses!2sar"
+                                    allowfullscreen="">
+                            </iframe>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>Greenbay Elementary</td>
+                            <td>1734 N. Orleans St., Chicago, IL 60614</td>
+                            <td class="mapa">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2969.025884368859!2d-87.64002798469278!3d41.91380227921933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880fd34073f306a3%3A0x9e1726bbf8f23f0e!2s1734%20N%20Orleans%20St%2C%20Chicago%2C%20IL%2060614%2C%20EE.%20UU.!5e0!3m2!1ses!2sar!4v1583514850956!5m2!1ses!2sar"
+                                    allowfullscreen="">
+                            </iframe>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>Howard A Yeager Elementary</td>
+                            <td>2245 N. Southport Ave., Chicago, IL 60614</td>
+                            <td class="mapa"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2968.5856830856196!2d-87.66511458469245!3d41.923264579218625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880fd2e37f9b8d2d%3A0x62ad8b907dd755d6!2s2245%20N%20Southport%20Ave%2C%20Chicago%2C%20IL%2060614%2C%20EE.%20UU.!5e0!3m2!1ses!2sar!4v1583514928917!5m2!1ses!2sar"
+                                    allowfullscreen="">
+                                </iframe>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Marjorie P Hart Elementary</td>
+                            <td>2625 N. Orchard St., Chicago, IL 60614</td>
+                            <td>
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2968.2919146584327!2d-87.64808628469221!3d41.92957827921812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880fd30f2630e551%3A0x3e719e44a5cef714!2s2625%20N%20Orchard%20St%2C%20Chicago%2C%20IL%2060614%2C%20EE.%20UU.!5e0!3m2!1ses!2sar!4v1583515078484!5m2!1ses!2sar"
+                                    allowfullscreen="">
+                            </iframe>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>North Elementary</td>
+                            <td>1409 N. Ogden Ave., Chicago, IL 60610</td>
+                            <td class="mapa">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2969.3377393845853!2d-87.64837698469299!3d41.907097779219896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880fd33af0e6ccc3%3A0x26c81c1d557667da!2s1409%20N%20Ogden%20Ave%2C%20Chicago%2C%20IL%2060610%2C%20EE.%20UU.!5e0!3m2!1ses!2sar!4v1583515275163!5m2!1ses!2sar"
+                                    allowfullscreen="">
+                            </iframe>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>South Elementary</td>
+                            <td>2101 N. Fremont St., Chicago, IL 60614</td>
+                            <td class="mapa">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2968.747950525072!2d-87.6535553846926!3d41.9197767792188!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880fd3196fb41dc7%3A0x970be7f7d6336df5!2s2101%20N%20Fremont%20St%2C%20Chicago%2C%20IL%2060614%2C%20EE.%20UU.!5e0!3m2!1ses!2sar!4v1583515325344!5m2!1ses!2sar"
+                                    allowfullscreen="">
+                            </iframe>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <hr>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <p><b>Facility Type: </b>Outdoor</p>
+
+                <p><b>Additional Information: </b>If deemed necessary by NYSL, games may be shortened or cancelled due to extreme weather conditions.</p>
+
+                <hr>
+
+                <p><b>For any questions please contact: </b></p>
+                <p> Michael Randall, League Coordinator</p>
+
+                <a class="btn btn-primary btn-xlg" href="tel:630-690-8132">Click to call (630) 690-8132</a>
+
+                <br><br>
+
+                <p><b>For volunteers to submit time availabilities please email: </b></p>
+                <p><a href="mailto:michael.randall@chisoccer.org">michael.randall@chisoccer.org</a></p>
+
+                <hr>
+
+                <nav class="navbar">
+                    <span class="navbar-text">&copy; 2020 NYSL | All Rights Reserved</span>
+                </nav>
+
+                <hr>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-database.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-analytics.js"></script>
+
+
+    <!-- FIREBASE USER INTERFACE FOR SING ON-->
+    <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.js"></script>
+
+    <!--  // Your web app's Firebase configuration and Initialization-->
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+
+    <!-- Vue.js Development HEAVY version-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <!-- Vue Production LIGHTER version
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
+
+    <!-- myScripts.js -->
+    <script src="js/main.js"></script>
+
+</body>
+
+</html>

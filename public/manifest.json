@@ -1,0 +1,13 @@
+{
+  "name": "NYSL Game Center",
+  "short_name": "NYSL Game Center",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff",
+  "lang": "en-US",
+  "description": "All your games information and chats in one place",
+  "prefer_related_applications": false,
+  "theme_color": "#fff",
+  "scope": "/",
+  "orientation": "portrait-primary"
+}
