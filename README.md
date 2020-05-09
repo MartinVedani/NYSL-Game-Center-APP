@@ -1,3 +1,9 @@
+# NYSL Little League Soccer full website
+MindHub 1. - NYSL full web site is published at https://martinvedani.github.io/NYSL-full-web-site/.
+
+The repository can be found at: https://github.com/MartinVedani/NYSL-full-web-site
+
+
 # NYSL Game Center App
 MindHub 3. Intro to CSS Grid with Firebase hosting and historic database is published at https://nysl-mobile-app-aa6fd.web.app
 
